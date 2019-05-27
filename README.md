@@ -1,1 +1,1 @@
-# TGIF-Vue
+# TGIF
