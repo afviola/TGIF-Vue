@@ -9,6 +9,7 @@ function inicializarPaginaSegunCamara(camara) {
             miembros = data.results[0].members;
             partidos.inicializarMiembros();
             cargarEstadisticas();
+            app.init();
         })
         .catch(error => console.log(error));
 }

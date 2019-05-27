@@ -3,15 +3,16 @@
 let app = new Vue({
     el: '#app',
     data: {
-        estadisticas: estadisticas,
-        miembros: miembros
+        estadisticasVue: {},
+        miembrosVue: [],
+        miembrosFiltrados: []
     },
 
     methods: {
         getMemberFullName(member) {
             return member.first_name + " " + (member.middle_name || "") + " " + member.last_name;
         },
-
+    
         getMemberVotesWithParty(member) {
             return Math.round(member.total_votes * member.votes_with_party_pct / 100);
         },
@@ -24,10 +25,20 @@ let app = new Vue({
             return document.querySelector(`select[name=\"${name}\"]`).value;
         },
 
-        filterMembersBy(checkValues, selectValue) {
-            return this.miembros
+        loadFilteredMembers() {
+            let checkValues, selectValue;
+            checkValues = this.getCheckBoxesValues('party-filter');
+            selectValue = this.getStateFilterValue('state-filter');
+
+            this.miembrosFiltrados = this.miembrosVue
                     .filter(miembro => (!selectValue || miembro.state === selectValue))
                     .filter(miembro => checkValues.includes(miembro.party));
+        },
+
+        init() {
+            this.estadisticasVue = estadisticas;
+            this.miembrosVue = miembros;
+            this.loadFilteredMembers();
         }
     }
 });

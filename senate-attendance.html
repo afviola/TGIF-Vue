@@ -91,22 +91,22 @@
           <tbody>
             <tr>
               <td>Democrats</td>
-              <td> {{estadisticas["number-of-democrats"]}} </td>
-              <td> {{estadisticas["democrats-average-votes-with-party"]}} </td>
+              <td> {{estadisticasVue["number-of-democrats"]}} </td>
+              <td> {{estadisticasVue["democrats-average-votes-with-party"]}} </td>
             </tr>
             <tr>
               <td>Republicans</td>
-              <td> {{estadisticas["number-of-republicans"]}} </td>
-              <td> {{estadisticas["republicans-average-votes-with-party"]}} </td>
+              <td> {{estadisticasVue["number-of-republicans"]}} </td>
+              <td> {{estadisticasVue["republicans-average-votes-with-party"]}} </td>
             </tr>
             <tr>
               <td>Independents</td>
-              <td> {{estadisticas["number-of-independents"]}} </td>
-              <td> {{estadisticas["independents-average-votes-with-party"]}} </td>
+              <td> {{estadisticasVue["number-of-independents"]}} </td>
+              <td> {{estadisticasVue["independents-average-votes-with-party"]}} </td>
             </tr>
             <tr>
               <td>Total</td>
-              <td> {{estadisticas["total"]}} </td>
+              <td> {{estadisticasVue["total"]}} </td>
               <td></td>
             </tr>
           </tbody>
@@ -125,7 +125,7 @@
             </tr>
           </thead>
           <tbody>
-            <tr v-for="member in estadisticas['least-engaged']">
+            <tr v-for="member in estadisticasVue['least-engaged']">
               <td>
                 <a v-bind:href="member.url">
                   {{getMemberFullName(member)}}
@@ -148,7 +148,7 @@
             </tr>
           </thead>
           <tbody>
-            <tr v-for="member in estadisticas['most-engaged']">
+            <tr v-for="member in estadisticasVue['most-engaged']">
               <td>
                 <a v-bind:href="member.url">
                   {{getMemberFullName(member)}}
