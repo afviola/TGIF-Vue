@@ -1,68 +1,106 @@
 "use strict";
 
-let miembros = null;
+let app = new Vue({
+    el: '#app',
+    data: {
+        miembrosVue: null,
+        partidos: [],
+        estadisticas: {
+            nroDemocratas: 0,
+            nroRepublicanos: 0,
+            nroIndependientes: 0,
+            nroTotal: 0,
+            democratsAverageVotesWithParty: 0,
+            republicansAverageVotesWithParty: 0,
+            independentsAverageVotesWithParty: 0,
+            leastEngaged: [],
+            mostEngaged: [],
+            leastLoyal: [],
+            mostLoyal: []
+        }
+    },
+
+    methods: {
+        init(miembros) {
+            this.miembrosVue = miembros;
+            this.cargarPartidos();
+            this.cargarEstadisticas();
+        },
+
+        cargarPartidos() {
+            this.miembrosVue.forEach(miembro => {
+                let partidoEncontrado = this.partidos.find(partido => partido.nombre === miembro.party);
+                if (partidoEncontrado) {
+                    partidoEncontrado.miembros.push(miembro);
+                } else {
+                    this.partidos.push({
+                        nombre: miembro.party,
+                        miembros: [miembro]
+                    });
+                }
+            });
+        },
+
+        cargarEstadisticas() {
+            this.estadisticas.nroDemocratas = this.getCantMiembrosDePartido('D');
+            this.estadisticas.nroRepublicanos = this.getCantMiembrosDePartido('R');
+            this.estadisticas.nroIndependientes = this.getCantMiembrosDePartido('I');
+            this.estadisticas.nroTotal = this.miembrosVue.length;
+
+            this.estadisticas.democratsAverageVotesWithParty = this.getVotoPromedioConPartido('D');
+            this.estadisticas.republicansAverageVotesWithParty = this.getVotoPromedioConPartido('R');
+            this.estadisticas.independentsAverageVotesWithParty = this.getVotoPromedioConPartido('I');
+
+            this.estadisticas.mostEngaged = this.get10pctMiembrosSegun('missed_votes_pct', (m1,m2) => m1.missed_votes_pct - m2.missed_votes_pct);
+            this.estadisticas.leastEngaged = this.get10pctMiembrosSegun('missed_votes_pct', (m1,m2) => m2.missed_votes_pct - m1.missed_votes_pct);
+            this.estadisticas.mostLoyal = this.get10pctMiembrosSegun('votes_with_party_pct', (m1,m2) => m2.votes_with_party_pct - m1.votes_with_party_pct);         
+            this.estadisticas.leastLoyal = this.get10pctMiembrosSegun('votes_with_party_pct', (m1,m2) => m1.votes_with_party_pct - m2.votes_with_party_pct);
+        },
+
+        getVotoPromedioConPartido(nombrePartido) {
+            let partidoEncontrado = this.partidos.find(partido => partido.nombre === nombrePartido);
+            if (partidoEncontrado) {
+                return Math.round(
+                    partidoEncontrado.miembros
+                        .map(miembro => miembro.votes_with_party_pct)
+                        .reduce((acum, pct) => acum + pct, 0) / partidoEncontrado.miembros.length
+                );
+            }
+            return 0;
+        },
+
+        get10pctMiembrosSegun(key, fnOrdenamiento) {
+            this.miembrosVue.sort(fnOrdenamiento);
+            let valorLimite = this.miembrosVue[Math.round(this.miembrosVue.length * 0.1) - 1][key];
   
-const estadisticas = {
-    "number-of-democrats": 0,
-    "number-of-republicans": 0,
-    "number-of-independents": 0,
-    "total": 0,
-    "democrats-average-votes-with-party": 0,
-    "republicans-average-votes-with-party": 0,
-    "independents-average-votes-with-party": 0,
-    "least-engaged": [],
-    "most-engaged": [],
-    "least-loyal": [],
-    "most-loyal": []
-};
+            if (this.miembrosVue[0][key] >= valorLimite) {
+                return this.miembrosVue.filter(m => m[key] >= valorLimite);
+            }
 
-const partidos = {
-    republicanos: [],
-    democratas: [],
-    independientes: [],
+            return this.miembrosVue.filter(m => m[key] <= valorLimite);
+        },
 
-    inicializarMiembros() {
-        this.republicanos = miembros.filter(m => m.party === "R");
-        this.democratas = miembros.filter(m => m.party === "D");
-        this.independientes = miembros.filter(m => m.party === "I");
+        getMiembrosDePartido(nombrePartido) {
+            let partidoEncontrado = this.partidos.find(partido => partido.nombre === nombrePartido);
+            if (partidoEncontrado) {
+                return partidoEncontrado.miembros;
+            }
+        },
+
+        getCantMiembrosDePartido(nombrePartido) {
+            let miembrosEncontrados = this.getMiembrosDePartido(nombrePartido);
+            if (miembrosEncontrados) {
+                return miembrosEncontrados.length;
+            }
+            return 0;
+        },
+
+        getMemberFullName(member) {
+            return member.first_name + " " + (member.middle_name || "") + " " + member.last_name;
+        },
+
+        getMemberVotesWithParty(member) {
+            return Math.round(member.total_votes * member.votes_with_party_pct / 100);
+        }
     }
-};
-
-function votoPromedioConPartido(miembrosDeUnPartido) {
-    if (miembrosDeUnPartido.length) {
-        return Math.round(
-            miembrosDeUnPartido
-                .map(miembro => miembro.votes_with_party_pct)
-                .reduce((pct1, pct2) => pct1 + pct2, 0) / miembrosDeUnPartido.length);
-    }
-    return 0;
-}
-
-function get10PctMiembrosSegun(key, fnOrdenamiento) {
-    miembros.sort(fnOrdenamiento);
-  
-    let valorLimite = miembros[Math.round(miembros.length * 0.1) - 1][key];
-  
-    if (miembros[0][key] >= valorLimite) {
-        return miembros.filter(m => m[key] >= valorLimite);
-    } 
-
-    return miembros.filter(m => m[key] <= valorLimite);
-}
-
-function cargarEstadisticas() {
-    estadisticas["number-of-democrats"] = partidos.democratas.length;
-    estadisticas["number-of-independents"] = partidos.independientes.length;
-    estadisticas["number-of-republicans"] = partidos.republicanos.length;
-    estadisticas["total"] = miembros.length;
-
-    estadisticas["independents-average-votes-with-party"] = votoPromedioConPartido(partidos.independientes);
-    estadisticas["democrats-average-votes-with-party"] = votoPromedioConPartido(partidos.democratas);
-    estadisticas["republicans-average-votes-with-party"] = votoPromedioConPartido(partidos.republicanos);
-
-    estadisticas["most-engaged"] = get10PctMiembrosSegun("missed_votes_pct", (m1, m2) => m1.missed_votes_pct - m2.missed_votes_pct);
-    estadisticas["least-engaged"] = get10PctMiembrosSegun("missed_votes_pct", (m1, m2) => m2.missed_votes_pct - m1.missed_votes_pct);
-
-    estadisticas["most-loyal"] = get10PctMiembrosSegun("votes_with_party_pct", (m1, m2) => m2.votes_with_party_pct - m1.votes_with_party_pct);
-    estadisticas["least-loyal"] = get10PctMiembrosSegun("votes_with_party_pct", (m1, m2) => m1.votes_with_party_pct - m2.votes_with_party_pct);
-}
+});

@@ -5,11 +5,9 @@ function inicializarPaginaSegunCamara(camara) {
   
     fetch(url, {headers: {"X-API-Key": "LdAhzLBvrq4dOnvfdddHYB1qgTk1cEjSFS77V4xk"}})
         .then(respuesta => respuesta.json())
-        .then(data => {
-            miembros = data.results[0].members;
-            partidos.inicializarMiembros();
-            cargarEstadisticas();
-            app.init();
+        .then(dataJson => {
+            let miembros = dataJson.results[0].members;
+            app.init(miembros);
         })
         .catch(error => console.log(error));
 }

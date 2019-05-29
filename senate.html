@@ -2,6 +2,7 @@
 <html lang="en">
 
 <head>
+  <meta charset="UTF-8">
   <title>Senate</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <!-- Latest compiled and minified CSS -->
@@ -75,16 +76,19 @@
       <div class="row">
         <div class="col">
           Filter by party:
-          <input type="checkbox" name="party-filter" value="R" checked @change="loadFilteredMembers"> Republican
-          <input type="checkbox" name="party-filter" value="D" checked @change="loadFilteredMembers"> Democrat
-          <input type="checkbox" name="party-filter" value="I" checked @change="loadFilteredMembers"> Independent
+          <input type="checkbox" name="party-filter" value="R" v-model="checkValues" @change="loadFilteredMembers"
+            checked> Republican
+          <input type="checkbox" name="party-filter" value="D" v-model="checkValues" @change="loadFilteredMembers"
+            checked> Democrat
+          <input type="checkbox" name="party-filter" value="I" v-model="checkValues" @change="loadFilteredMembers"
+            checked> Independent
         </div>
 
         <!-- State Filter -->
         <div class="col">
           <div>
             Filter by state:
-            <select name="state-filter" @change="loadFilteredMembers">
+            <select name="state-filter" v-model="selectValue" @change="loadFilteredMembers">
               <option value="">All</option>
               <option value="AL">Alabama</option>
               <option value="AK">Alaska</option>
@@ -180,8 +184,7 @@
   <!-- Latest compiled JavaScript -->
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
-  <script src="scripts/componentes.js"></script>
-  <script src="scripts/estadisticas.js"></script>
+  <script src="scripts/tablaFiltro.js"></script>
   <script src="scripts/fetch.js"></script>
 </body>
 

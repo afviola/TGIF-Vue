@@ -2,6 +2,7 @@
 <html lang="en">
 
 <head>
+  <meta charset="UTF-8">
   <title>Senate Party Loyalty</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <!-- Latest compiled and minified CSS -->
@@ -82,22 +83,22 @@
           <tbody>
             <tr>
               <td>Democrats</td>
-              <td> {{estadisticas["number-of-democrats"]}} </td>
-              <td> {{estadisticas["democrats-average-votes-with-party"]}}</td>
+              <td> {{estadisticas.nroDemocratas}} </td>
+              <td> {{estadisticas.democratsAverageVotesWithParty}}</td>
             </tr>
             <tr>
               <td>Republicans</td>
-              <td> {{estadisticas["number-of-republicans"]}} </td>
-              <td> {{estadisticas["republicans-average-votes-with-party"]}}</td>
+              <td> {{estadisticas.nroRepublicanos}} </td>
+              <td> {{estadisticas.republicansAverageVotesWithParty}}</td>
             </tr>
             <tr>
               <td>Independents</td>
-              <td> {{estadisticas["number-of-independents"]}} </td>
-              <td> {{estadisticas["independents-average-votes-with-party"]}}</td>
+              <td> {{estadisticas.nroIndependientes}} </td>
+              <td> {{estadisticas.independentsAverageVotesWithParty}}</td>
             </tr>
             <tr>
               <td>Total</td>
-              <td> {{estadisticas["total"]}} </td>
+              <td> {{estadisticas.nroTotal}} </td>
               <td></td>
             </tr>
           </tbody>
@@ -117,7 +118,7 @@
             </tr>
           </thead>
           <tbody>
-            <tr v-for="member in estadisticas['least-loyal']">
+            <tr v-for="member in estadisticas.leastLoyal">
               <td>
                 <a v-bind:href="member.url">{{getMemberFullName(member)}}</a>
               </td>
@@ -138,7 +139,7 @@
             </tr>
           </thead>
           <tbody>
-            <tr v-for="member in estadisticas['most-loyal']">
+            <tr v-for="member in estadisticas.mostLoyal">
               <td>
                 <a v-bind:href="member.url">{{getMemberFullName(member)}}</a>
               </td>
@@ -164,7 +165,6 @@
   <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
   <script src="scripts/estadisticas.js"></script>
   <script src="scripts/fetch.js"></script>
-  <script src="scripts/componentes.js"></script>
 </body>
 
 </html>

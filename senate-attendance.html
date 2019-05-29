@@ -2,6 +2,7 @@
 <html lang="en">
 
 <head>
+  <meta charset="UTF-8">
   <title>Senate Attendance</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <!-- Latest compiled and minified CSS -->
@@ -91,22 +92,22 @@
           <tbody>
             <tr>
               <td>Democrats</td>
-              <td> {{estadisticasVue["number-of-democrats"]}} </td>
-              <td> {{estadisticasVue["democrats-average-votes-with-party"]}} </td>
+              <td>{{estadisticas.nroDemocratas}}</td>
+              <td>{{estadisticas.democratsAverageVotesWithParty}}</td>
             </tr>
             <tr>
               <td>Republicans</td>
-              <td> {{estadisticasVue["number-of-republicans"]}} </td>
-              <td> {{estadisticasVue["republicans-average-votes-with-party"]}} </td>
+              <td>{{estadisticas.nroRepublicanos}}</td>
+              <td>{{estadisticas.republicansAverageVotesWithParty}}</td>
             </tr>
             <tr>
               <td>Independents</td>
-              <td> {{estadisticasVue["number-of-independents"]}} </td>
-              <td> {{estadisticasVue["independents-average-votes-with-party"]}} </td>
+              <td>{{estadisticas.nroIndependientes}}</td>
+              <td>{{estadisticas.independentsAverageVotesWithParty}}</td>
             </tr>
             <tr>
               <td>Total</td>
-              <td> {{estadisticasVue["total"]}} </td>
+              <td>{{estadisticas.nroTotal}}</td>
               <td></td>
             </tr>
           </tbody>
@@ -125,11 +126,9 @@
             </tr>
           </thead>
           <tbody>
-            <tr v-for="member in estadisticasVue['least-engaged']">
+            <tr v-for="member in estadisticas.leastEngaged">
               <td>
-                <a v-bind:href="member.url">
-                  {{getMemberFullName(member)}}
-                </a>
+                <a v-bind:href="member.url">{{getMemberFullName(member)}}</a>
               </td>
               <td>{{member.missed_votes}}</td>
               <td>{{member.missed_votes_pct}}</td>
@@ -148,15 +147,13 @@
             </tr>
           </thead>
           <tbody>
-            <tr v-for="member in estadisticasVue['most-engaged']">
-              <td>
-                <a v-bind:href="member.url">
-                  {{getMemberFullName(member)}}
-                </a>
-              </td>
-              <td>{{member.missed_votes}}</td>
-              <td>{{member.missed_votes_pct}}</td>
-            </tr>
+              <tr v-for="member in estadisticas.mostEngaged">
+                  <td>
+                    <a v-bind:href="member.url">{{getMemberFullName(member)}}</a>
+                  </td>
+                  <td>{{member.missed_votes}}</td>
+                  <td>{{member.missed_votes_pct}}</td>
+                </tr>
           </tbody>
         </table>
       </div>
@@ -176,7 +173,6 @@
   <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
   <script src="scripts/estadisticas.js"></script>
   <script src="scripts/fetch.js"></script>
-  <script src="scripts/componentes.js"></script>
 </body>
 
 </html>
